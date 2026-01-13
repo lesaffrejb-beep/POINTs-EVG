@@ -3,7 +3,8 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <meta name="theme-color" content="#050505">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -240,7 +241,8 @@
             font-size: 1.4rem;
             font-weight: 700;
             opacity: 0;
-            top: 55%;
+            top: 50%;
+            /* Centered with score */
             transform: translateY(-50%);
             animation: deltaSideFade 1.2s forwards;
             pointer-events: none;
@@ -248,11 +250,13 @@
         }
 
         .t-com .delta {
-            right: -5px;
+            right: -8px;
+            /* Slightly closer */
         }
 
         .t-mor .delta {
-            left: -5px;
+            left: -8px;
+            /* Slightly closer */
         }
 
         .delta.plus {
@@ -613,6 +617,8 @@
             gap: 4px;
             cursor: pointer;
             transition: background 0.2s;
+            touch-action: manipulation;
+            /* Prevent double-tap zoom */
         }
 
         .mj-btn span:first-child {
