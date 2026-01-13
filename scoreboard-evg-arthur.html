@@ -577,21 +577,25 @@
         }
 
         .reset-trigger {
-            background: none;
-            border: 1px solid var(--border-glass);
-            color: var(--text-tertiary);
-            padding: 8px 16px;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.12) 0%, rgba(212, 175, 55, 0.06) 100%);
+            border: 1px solid var(--border-gold-subtle);
+            color: var(--gold-base);
+            padding: 14px 24px;
             font-family: var(--font-tech);
             text-transform: uppercase;
-            font-size: 0.7rem;
-            border-radius: 20px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            border-radius: 24px;
             cursor: pointer;
             transition: all 0.3s;
         }
 
         .reset-trigger:hover {
-            color: var(--text-secondary);
-            border-color: var(--text-tertiary);
+            transform: scale(1.03);
+            color: var(--gold-bright);
+            border-color: var(--border-gold-strong);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.1) 100%);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
         }
 
         /* MODAL */
@@ -780,8 +784,8 @@
            ENHANCEMENT: PLAYED STATE
            ======================================================================== */
         .quest-card.played {
-            opacity: 0.3;
-            filter: grayscale(0.6);
+            opacity: 0.45;
+            filter: grayscale(0.5);
             transition: all 0.5s ease;
         }
 
@@ -950,7 +954,8 @@
             width: 44px;
             height: 44px;
             border-radius: 50%;
-            display: flex;
+            display: none;
+            /* Hidden - not supported on iOS */
             align-items: center;
             justify-content: center;
             cursor: pointer;
