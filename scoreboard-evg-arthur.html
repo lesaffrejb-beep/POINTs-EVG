@@ -780,8 +780,8 @@
            ENHANCEMENT: PLAYED STATE
            ======================================================================== */
         .quest-card.played {
-            opacity: 0.5;
-            filter: grayscale(0.4);
+            opacity: 0.3;
+            filter: grayscale(0.6);
             transition: all 0.5s ease;
         }
 
@@ -860,9 +860,11 @@
         }
 
         /* ========================================================================
-           ENHANCEMENT: ACHIEVEMENTS
+           ENHANCEMENT: ACHIEVEMENTS (DISABLED)
            ======================================================================== */
         .achievement-popup {
+            display: none;
+            /* User requested removal */
             position: fixed;
             top: 80px;
             left: 50%;
@@ -1641,7 +1643,7 @@
                 // Delta display
                 if (totalA !== lastScoreA) showDelta(scoreElA, totalA - lastScoreA);
                 if (totalB !== lastScoreB) showDelta(scoreElB, totalB - lastScoreB);
-                checkAchievements(totalA, totalB);
+                // checkAchievements(totalA, totalB); // Disabled by user request
             }
 
             lastScoreA = totalA;
