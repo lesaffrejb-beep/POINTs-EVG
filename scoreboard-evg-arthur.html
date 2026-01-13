@@ -1,0 +1,1264 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#050505">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>⚔️ EVG Arthur — Dark Fantasy HUD</title>
+
+    <!-- FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* ========================================================================
+           DESIGN SYSTEM — VOID & GOLD (AAA DARK FANTASY)
+           ======================================================================== */
+        :root {
+            /* === PALETTE: THE VOID === */
+            --bg-void: #050505;
+            --bg-abyss: #080808;
+            --bg-obsidian: #0c0c0c;
+            --bg-glass: rgba(8, 8, 8, 0.85);
+            --bg-glass-heavy: rgba(5, 5, 5, 0.95);
+
+            /* === PALETTE: METALS & MAGIC === */
+            --gold-dim: #8a7338;
+            --gold-base: #d4af37;
+            --gold-bright: #f4d060;
+            --gold-gradient: linear-gradient(135deg, var(--gold-base) 0%, var(--gold-dim) 100%);
+
+            /* === TEAMS === */
+            --team-com-dim: #154c25;
+            --team-com-base: #4ade80;
+            --team-com-glow: #22c55e;
+
+            --team-mor-dim: #5c1414;
+            --team-mor-base: #ef4444;
+            --team-mor-glow: #dc2626;
+
+            /* === BORDERS & SEPARATORS === */
+            --border-glass: rgba(255, 255, 255, 0.04);
+            --border-gold-subtle: rgba(212, 175, 55, 0.15);
+            --border-gold-strong: rgba(212, 175, 55, 0.4);
+
+            /* === TEXT === */
+            --text-primary: #e5e5e5;
+            --text-secondary: #909090;
+            --text-tertiary: #505050;
+            --text-gold: var(--gold-base);
+
+            /* === SPACING === */
+            --s-xs: 4px;
+            --s-sm: 8px;
+            --s-md: 16px;
+            --s-lg: 24px;
+            --s-xl: 48px;
+            --s-xxl: 80px;
+
+            /* === EFFECTS === */
+            --glow-gold-sm: 0 0 10px rgba(212, 175, 55, 0.1);
+            --glow-gold-md: 0 0 20px rgba(212, 175, 55, 0.2);
+            --glow-com: 0 0 15px rgba(74, 222, 128, 0.15);
+            --glow-mor: 0 0 15px rgba(239, 68, 68, 0.15);
+
+            --blur-glass: blur(20px);
+            /* Removed pixelated noise - replaced with smooth grain below */
+
+            /* === FONTS === */
+            --font-epic: 'Cinzel', serif;
+            /* Titles */
+            --font-tech: 'Rajdhani', sans-serif;
+            /* HUD / Numbers */
+            --font-body: 'Inter', sans-serif;
+            /* Reading text */
+        }
+
+        /* ========================================================================
+           RESET & BASE
+           ======================================================================== */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow-x: hidden;
+            background-color: var(--bg-void);
+            color: var(--text-primary);
+            font-family: var(--font-body);
+            font-size: 16px;
+        }
+
+        body {
+            /* Multi-layer smooth gradients - NO pixelation */
+            background:
+                radial-gradient(ellipse 100% 40% at 50% 0%, rgba(21, 21, 21, 0.8) 0%, transparent 60%),
+                radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.02) 0%, transparent 25%),
+                radial-gradient(circle at 80% 20%, rgba(74, 222, 128, 0.015) 0%, transparent 25%),
+                repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px),
+                var(--bg-void);
+            background-attachment: fixed;
+            padding-bottom: 120px;
+            /* Space for footer */
+        }
+
+        /* TYPOGRAPHY UTILS */
+        .text-epic {
+            font-family: var(--font-epic);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+        }
+
+        .text-tech {
+            font-family: var(--font-tech);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .text-gold {
+            color: var(--text-gold);
+            text-shadow: var(--glow-gold-sm);
+        }
+
+        /* ========================================================================
+           COMPONENT: HUD HEADER (Sticky)
+           ======================================================================== */
+        .hud-header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--s-sm) var(--s-md);
+            background: var(--bg-glass);
+            backdrop-filter: var(--blur-glass);
+            -webkit-backdrop-filter: var(--blur-glass);
+            border-bottom: 1px solid var(--border-glass);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .hud-header::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: radial-gradient(circle, var(--gold-base) 0%, transparent 80%);
+            opacity: 0.3;
+        }
+
+        .team-score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80px;
+        }
+
+        .team-name {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-bottom: -2px;
+            font-weight: 600;
+        }
+
+        .score-val {
+            font-family: var(--font-tech);
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1;
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* Team Colors */
+        .t-com .team-name {
+            color: var(--team-com-base);
+        }
+
+        .t-com .score-val {
+            color: var(--team-com-base);
+            text-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
+        }
+
+        .t-mor .team-name {
+            color: var(--team-mor-base);
+        }
+
+        .t-mor .score-val {
+            color: var(--team-mor-base);
+            text-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .score-val.bump {
+            transform: scale(1.3);
+        }
+
+        /* VS ORB */
+        .vs-orb {
+            position: relative;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .vs-orb-ring {
+            position: absolute;
+            inset: 0;
+            border: 1px solid var(--border-gold-subtle);
+            border-radius: 50%;
+            animation: spin 10s linear infinite;
+        }
+
+        .vs-orb-ring::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: 50%;
+            width: 4px;
+            height: 4px;
+            background: var(--gold-base);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--gold-base);
+        }
+
+        .vs-text {
+            font-family: var(--font-epic);
+            font-size: 0.9rem;
+            color: var(--gold-dim);
+            font-weight: 700;
+        }
+
+        @keyframes spin {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ========================================================================
+           LAYOUT MAIN
+           ======================================================================== */
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            padding: 0 var(--s-md);
+        }
+
+        /* SECTIONS */
+        .section-header {
+            text-align: center;
+            margin: var(--s-xl) 0 var(--s-lg);
+            position: relative;
+        }
+
+        .section-num {
+            display: inline-block;
+            font-family: var(--font-tech);
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            border: 1px solid var(--border-glass);
+            padding: 2px 8px;
+            border-radius: 4px;
+            margin-bottom: var(--s-sm);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: var(--gold-base);
+            text-shadow: var(--glow-gold-md);
+        }
+
+        .section-subtitle {
+            font-family: var(--font-tech);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            letter-spacing: 0.2em;
+            margin-top: var(--s-xs);
+        }
+
+        .section-divider {
+            height: 1px;
+            width: 100px;
+            background: radial-gradient(circle, var(--gold-dim) 0%, transparent 100%);
+            margin: var(--s-md) auto 0;
+            opacity: 0.5;
+        }
+
+        /* ========================================================================
+           QUEST CARDS (DIEGETIC UI)
+           ======================================================================== */
+        .quest-card {
+            background: rgba(12, 12, 12, 0.6);
+            border: 1px solid var(--border-glass);
+            margin-bottom: var(--s-md);
+            position: relative;
+            padding: var(--s-lg);
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Corner Accents */
+        .quest-card::before,
+        .quest-card::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .quest-card::before {
+            top: -1px;
+            left: -1px;
+            border-top-color: var(--text-tertiary);
+            border-left-color: var(--text-tertiary);
+        }
+
+        .quest-card::after {
+            bottom: -1px;
+            right: -1px;
+            border-bottom-color: var(--text-tertiary);
+            border-right-color: var(--text-tertiary);
+        }
+
+        .quest-card:hover {
+            border-color: var(--border-gold-subtle);
+        }
+
+        .quest-card:hover::before,
+        .quest-card:hover::after {
+            border-color: var(--gold-dim);
+            width: 12px;
+            height: 12px;
+        }
+
+        /* Legendary Variant */
+        .quest-card.legendary {
+            background: linear-gradient(180deg, rgba(212, 175, 55, 0.05) 0%, rgba(12, 12, 12, 0.8) 100%);
+            border-color: var(--border-gold-subtle);
+        }
+
+        .quest-card.legendary .card-title {
+            color: var(--gold-bright);
+        }
+
+        /* Card Content */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--s-md);
+        }
+
+        .card-meta {
+            flex: 1;
+            padding-right: var(--s-md);
+        }
+
+        .card-title {
+            font-family: var(--font-tech);
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            letter-spacing: 0.05em;
+        }
+
+        .card-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .xp-badge {
+            font-family: var(--font-tech);
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: var(--gold-dim);
+            border: 1px solid var(--border-gold-subtle);
+            padding: 4px 8px;
+            border-radius: 2px;
+            height: fit-content;
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+            white-space: nowrap;
+        }
+
+        /* ========================================================================
+           INTERACTIVE RUNES (Buttons)
+           ======================================================================== */
+        .rune-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--s-sm);
+        }
+
+        .rune-btn {
+            appearance: none;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-glass);
+            color: var(--text-tertiary);
+            padding: var(--s-md);
+            font-family: var(--font-epic);
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .rune-btn:active {
+            transform: scale(0.96);
+        }
+
+        /* Selecting Teams */
+        .rune-btn.com:hover {
+            border-color: var(--team-com-dim);
+            color: var(--team-com-base);
+            background: rgba(74, 222, 128, 0.05);
+        }
+
+        .rune-btn.mor:hover {
+            border-color: var(--team-mor-dim);
+            color: var(--team-mor-base);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        /* Active State */
+        .rune-btn.active {
+            border-color: currentColor;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .rune-btn.com.active {
+            color: var(--team-com-base);
+            background: linear-gradient(90deg, transparent, rgba(74, 222, 128, 0.1), transparent);
+            border-color: var(--team-com-base);
+            box-shadow: 0 0 15px rgba(74, 222, 128, 0.1);
+        }
+
+        .rune-btn.mor.active {
+            color: var(--team-mor-base);
+            background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.1), transparent);
+            border-color: var(--team-mor-base);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.1);
+        }
+
+        /* ========================================================================
+           ACCORDION (Revelations)
+           ======================================================================== */
+        .reveal-btn {
+            background: none;
+            border: none;
+            color: var(--text-tertiary);
+            font-family: var(--font-tech);
+            font-size: 0.75rem;
+            margin-top: var(--s-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .reveal-btn:hover {
+            color: var(--text-secondary);
+        }
+
+        .reveal-icon {
+            transition: transform 0.3s ease;
+            font-size: 0.8em;
+        }
+
+        .reveal-btn.open .reveal-icon {
+            transform: rotate(180deg);
+        }
+
+        .secret-box {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.3s ease;
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 2px solid var(--border-glass);
+            margin-top: var(--s-sm);
+        }
+
+        .secret-box.open {
+            grid-template-rows: 1fr;
+            border-color: var(--gold-dim);
+        }
+
+        .secret-content {
+            overflow: hidden;
+            font-size: 0.9rem;
+            color: var(--gold-bright);
+            font-style: italic;
+        }
+
+        .secret-inner {
+            padding: var(--s-md);
+        }
+
+        /* ========================================================================
+           MJ CONTROLS
+           ======================================================================== */
+        .mj-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 4px;
+            margin-top: var(--s-md);
+        }
+
+        .mj-btn {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            color: var(--text-secondary);
+            padding: var(--s-md) 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .mj-btn span:first-child {
+            font-family: var(--font-tech);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .mj-btn span:last-child {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .mj-btn.plus-com {
+            color: var(--team-com-base);
+        }
+
+        .mj-btn.plus-mor {
+            color: var(--team-mor-base);
+        }
+
+        .mj-btn:active {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* ========================================================================
+           FOOTER & MODAL
+           ======================================================================== */
+        .footer {
+            text-align: center;
+            margin-top: var(--s-xxl);
+            opacity: 0.5;
+            padding-bottom: var(--s-lg);
+        }
+
+        .reset-trigger {
+            background: none;
+            border: 1px solid var(--border-glass);
+            color: var(--text-tertiary);
+            padding: 8px 16px;
+            font-family: var(--font-tech);
+            text-transform: uppercase;
+            font-size: 0.7rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .reset-trigger:hover {
+            color: var(--text-secondary);
+            border-color: var(--text-tertiary);
+        }
+
+        /* MODAL */
+        .modal-mask {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-mask.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-box {
+            background: var(--bg-obsidian);
+            border: 1px solid var(--border-gold-subtle);
+            padding: var(--s-xl);
+            text-align: center;
+            max-width: 90%;
+            width: 320px;
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.1);
+        }
+
+        .modal-mask.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-title {
+            font-family: var(--font-epic);
+            color: var(--gold-base);
+            font-size: 1.5rem;
+            margin-bottom: var(--s-md);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: var(--s-md);
+            margin-top: var(--s-lg);
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: var(--s-md);
+            border: none;
+            font-family: var(--font-tech);
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .btn-cancel {
+            background: transparent;
+            border: 1px solid var(--border-glass);
+            color: var(--text-secondary);
+        }
+
+        .btn-danger {
+            background: var(--gold-base);
+            color: #000;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- HUD -->
+    <header class="hud-header">
+        <div class="team-score t-com">
+            <span class="team-name">COMMUNAUTÉ</span>
+            <span class="score-val" id="scoreA">0</span>
+        </div>
+
+        <div class="vs-orb">
+            <div class="vs-orb-ring"></div>
+            <span class="vs-text">VS</span>
+        </div>
+
+        <div class="team-score t-mor">
+            <span class="team-name">MORDOR</span>
+            <span class="score-val" id="scoreB">0</span>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- CHAPITRE 1 -->
+        <section class="section-header text-epic">
+            <div class="section-num">CHAPITRE I</div>
+            <h2 class="section-title">Le Duathlon</h2>
+            <div class="section-subtitle">L'Auberge du Poney Fringant</div>
+            <div class="section-divider"></div>
+        </section>
+
+        <!-- BABY FOOT -->
+        <article class="quest-card" data-points="1">
+            <div class="card-header">
+                <div class="card-meta">
+                    <h3 class="card-title">⚽ Baby-Foot — Match 1</h3>
+                    <p class="card-desc">Premier à 5 points. Pas de pissette, pas de râteau.</p>
+                </div>
+                <div class="xp-badge">1 PT</div>
+            </div>
+            <div class="rune-actions">
+                <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+            </div>
+        </article>
+
+        <article class="quest-card" data-points="1">
+            <div class="card-header">
+                <div class="card-meta">
+                    <h3 class="card-title">⚽ Baby-Foot — Match 2</h3>
+                    <p class="card-desc">La Revanche.</p>
+                </div>
+                <div class="xp-badge">1 PT</div>
+            </div>
+            <div class="rune-actions">
+                <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+            </div>
+        </article>
+
+        <article class="quest-card" data-points="1">
+            <div class="card-header">
+                <div class="card-meta">
+                    <h3 class="card-title">⚽ Baby-Foot — Match 3</h3>
+                    <p class="card-desc">La Belle. Tout se joue maintenant.</p>
+                </div>
+                <div class="xp-badge">1 PT</div>
+            </div>
+            <div class="rune-actions">
+                <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+            </div>
+        </article>
+
+        <!-- BILLARD -->
+        <article class="quest-card" data-points="1">
+            <div class="card-header">
+                <div class="card-meta">
+                    <h3 class="card-title">🎱 Billard — Partie 1</h3>
+                    <p class="card-desc">La noire termine la partie.</p>
+                </div>
+                <div class="xp-badge">1 PT</div>
+            </div>
+            <div class="rune-actions">
+                <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+            </div>
+        </article>
+
+        <article class="quest-card" data-points="1">
+            <div class="card-header">
+                <div class="card-meta">
+                    <h3 class="card-title">🎱 Billard — Partie 2</h3>
+                    <p class="card-desc">La Revanche.</p>
+                </div>
+                <div class="xp-badge">1 PT</div>
+            </div>
+            <div class="rune-actions">
+                <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+            </div>
+        </article>
+
+        <article class="quest-card" data-points="1">
+            <div class="card-header">
+                <div class="card-meta">
+                    <h3 class="card-title">🎱 Billard — Partie 3</h3>
+                    <p class="card-desc">La Belle. Concentration maximale.</p>
+                </div>
+                <div class="xp-badge">1 PT</div>
+            </div>
+            <div class="rune-actions">
+                <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+            </div>
+        </article>
+
+        <!-- CHAPITRE 2 -->
+        <section class="section-header text-epic">
+            <div class="section-num">CHAPITRE II</div>
+            <h2 class="section-title">Beer Pong</h2>
+            <div class="section-subtitle">La Bataille du Gouffre de Helm</div>
+            <div class="section-divider"></div>
+        </section>
+
+        <article class="quest-card legendary" data-points="5">
+            <div class="card-header">
+                <div class="card-meta">
+                    <h3 class="card-title">🍺 LA GRANDE GUERRE</h3>
+                    <p class="card-desc">
+                        <strong style="color: var(--gold-base);">⚠️ Règle Royale Active :</strong><br>
+                        Si Arthur met une balle, <em>tout le monde</em> boit une gorgée — même sa propre équipe.
+                    </p>
+                </div>
+                <div class="xp-badge">RANK S | 5 PTS</div>
+            </div>
+            <div class="rune-actions">
+                <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+            </div>
+        </article>
+
+        <!-- CHAPITRE 3 -->
+        <section class="section-header text-epic">
+            <div class="section-num">CHAPITRE III</div>
+            <h2 class="section-title">Spoticlash</h2>
+            <div class="section-subtitle">Le Chant des Ainur</div>
+            <div class="section-divider"></div>
+        </section>
+
+        <div id="spoticlash_container">
+            <!-- JS Will Inject Here -->
+        </div>
+
+        <!-- CHAPITRE 4 -->
+        <section class="section-header text-epic">
+            <div class="section-num">CHAPITRE IV</div>
+            <h2 class="section-title">Le Grand Quiz</h2>
+            <div class="section-subtitle">Les Énigmes de Gollum</div>
+            <div class="section-divider"></div>
+        </section>
+
+        <!-- Q1 -->
+        <article class="quest-card" data-points="2">
+            <div class="card-header">
+                <div class="card-meta">
+                    <h3 class="card-title">Q1 : La Blessure</h3>
+                    <p class="card-desc">Arthur s'est déjà pété sérieusement quelque chose. Je veux la partie du corps
+                        et comment c'est arrivé.</p>
+                    <button class="reveal-btn" onclick="toggleSecret(this)">
+                        <span>Révélations</span>
+                        <span class="reveal-icon">▼</span>
+                    </button>
+                    <div class="secret-box">
+                        <div class="secret-content">
+                            <div class="secret-inner">Fémur, en golfette 🏌️</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="xp-badge">2 PTS</div>
+            </div>
+            <div class="rune-actions">
+                <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+            </div>
+        </article>
+
+        <!-- Q2 -->
+        <article class="quest-card" data-points="2">
+            <div class="card-header">
+                <div class="card-meta">
+                    <h3 class="card-title">Q2 : Le Tableau de Chasse</h3>
+                    <p class="card-desc">Liste exhaustive des exs ET amoureuses d'Arthur. Point bonus si vous dites s'il
+                        a conclu.</p>
+                    <button class="reveal-btn" onclick="toggleSecret(this)">
+                        <span>Révélations</span>
+                        <span class="reveal-icon">▼</span>
+                    </button>
+                    <div class="secret-box">
+                        <div class="secret-content">
+                            <div class="secret-inner">⚖️ Juge : Arthur décide (pas de réponse écrite)</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="xp-badge">2 PTS</div>
+            </div>
+            <div class="rune-actions">
+                <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+            </div>
+        </article>
+
+        <!-- Q3 -->
+        <article class="quest-card" data-points="2">
+            <div class="card-header">
+                <div class="card-meta">
+                    <h3 class="card-title">Q3 : Géographie</h3>
+                    <p class="card-desc">Dans quel département français précis se trouve le "Paintball 79" où nous
+                        étions cet aprem ?</p>
+                    <button class="reveal-btn" onclick="toggleSecret(this)">
+                        <span>Révélations</span>
+                        <span class="reveal-icon">▼</span>
+                    </button>
+                    <div class="secret-box">
+                        <div class="secret-content">
+                            <div class="secret-inner">Les Deux-Sèvres (79) 📍</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="xp-badge">2 PTS</div>
+            </div>
+            <div class="rune-actions">
+                <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+            </div>
+        </article>
+
+        <!-- Q4 -->
+        <article class="quest-card" data-points="2">
+            <div class="card-header">
+                <div class="card-meta">
+                    <h3 class="card-title">Q4 : Le Berger</h3>
+                    <p class="card-desc">Je veux le prénom du berger pour qui travaillait Arthur à Moulinet.</p>
+                    <button class="reveal-btn" onclick="toggleSecret(this)">
+                        <span>Révélations</span>
+                        <span class="reveal-icon">▼</span>
+                    </button>
+                    <div class="secret-box">
+                        <div class="secret-content">
+                            <div class="secret-inner">Claude & Domi (qui hébergeaient) 🐑</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="xp-badge">2 PTS</div>
+            </div>
+            <div class="rune-actions">
+                <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+            </div>
+        </article>
+
+        <!-- Q5 -->
+        <article class="quest-card" data-points="2">
+            <div class="card-header">
+                <div class="card-meta">
+                    <h3 class="card-title">Q5 : Le TOC</h3>
+                    <p class="card-desc">Arthur a un toc. C'est quoi ?<br><small>1) Inbox 0 • 2) Vaisselle avant manger
+                            • 3) Catégoriser virements • 4) Compter caisses</small></p>
+                    <button class="reveal-btn" onclick="toggleSecret(this)">
+                        <span>Révélations</span>
+                        <span class="reveal-icon">▼</span>
+                    </button>
+                    <div class="secret-box">
+                        <div class="secret-content">
+                            <div class="secret-inner">2) Faire la vaisselle avant de manger 🍽️</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="xp-badge">2 PTS</div>
+            </div>
+            <div class="rune-actions">
+                <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+            </div>
+        </article>
+
+        <!-- Q6 -->
+        <article class="quest-card" data-points="2">
+            <div class="card-header">
+                <div class="card-meta">
+                    <h3 class="card-title">Q6 : La Rencontre</h3>
+                    <p class="card-desc">Où Arthur et Anaé se sont-ils vus pour la première fois ?</p>
+                    <button class="reveal-btn" onclick="toggleSecret(this)">
+                        <span>Révélations</span>
+                        <span class="reveal-icon">▼</span>
+                    </button>
+                    <div class="secret-box">
+                        <div class="secret-content">
+                            <div class="secret-inner">Juigné 💕</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="xp-badge">2 PTS</div>
+            </div>
+            <div class="rune-actions">
+                <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+            </div>
+        </article>
+
+        <!-- Q7 -->
+        <article class="quest-card" data-points="2">
+            <div class="card-header">
+                <div class="card-meta">
+                    <h3 class="card-title">Q7 : La Soif Légendaire</h3>
+                    <p class="card-desc">Combien a pu boire Arthur de litres à Tonton Foch pendant sa période rue Hoche
+                        ? (En moins de 2h)</p>
+                    <button class="reveal-btn" onclick="toggleSecret(this)">
+                        <span>Révélations</span>
+                        <span class="reveal-icon">▼</span>
+                    </button>
+                    <div class="secret-box">
+                        <div class="secret-content">
+                            <div class="secret-inner">3 Litres (ou 14 Bud) en 2h 🍺🍺🍺</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="xp-badge">2 PTS</div>
+            </div>
+            <div class="rune-actions">
+                <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+            </div>
+        </article>
+
+        <!-- Q8 -->
+        <article class="quest-card" data-points="2">
+            <div class="card-header">
+                <div class="card-meta">
+                    <h3 class="card-title">Q8 : Le Mot Fantôme</h3>
+                    <p class="card-desc">Un mot qu'Arthur écrit H24 par message mais ne dit jamais dans la vraie vie.
+                    </p>
+                    <button class="reveal-btn" onclick="toggleSecret(this)">
+                        <span>Révélations</span>
+                        <span class="reveal-icon">▼</span>
+                    </button>
+                    <div class="secret-box">
+                        <div class="secret-content">
+                            <div class="secret-inner">⚖️ Juge : Arthur valide chaque proposition</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="xp-badge">2 PTS</div>
+            </div>
+            <div class="rune-actions">
+                <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+            </div>
+        </article>
+
+        <!-- Q9 -->
+        <article class="quest-card" data-points="2">
+            <div class="card-header">
+                <div class="card-meta">
+                    <h3 class="card-title">Q9 : Le Drive — Mort Subite</h3>
+                    <p class="card-desc">Combien de photos exactement contient le dossier Drive "Souvenirs Arthur" ? (Au
+                        plus proche)</p>
+                    <button class="reveal-btn" onclick="toggleSecret(this)">
+                        <span>Révélations</span>
+                        <span class="reveal-icon">▼</span>
+                    </button>
+                    <div class="secret-box">
+                        <div class="secret-content">
+                            <div class="secret-inner">📂 Voir le compteur du Drive en direct !</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="xp-badge">2 PTS</div>
+            </div>
+            <div class="rune-actions">
+                <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+            </div>
+        </article>
+
+        <!-- Q10 -->
+        <article class="quest-card" data-points="2">
+            <div class="card-header">
+                <div class="card-meta">
+                    <h3 class="card-title">Q10 : Culture Foot</h3>
+                    <p class="card-desc">Quel est le seul club français à avoir gagné la Ligue des Champions ? (Année
+                        bonus)</p>
+                    <button class="reveal-btn" onclick="toggleSecret(this)">
+                        <span>Révélations</span>
+                        <span class="reveal-icon">▼</span>
+                    </button>
+                    <div class="secret-box">
+                        <div class="secret-content">
+                            <div class="secret-inner">L'Olympique de Marseille (1993) ⚽🏆</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="xp-badge">2 PTS</div>
+            </div>
+            <div class="rune-actions">
+                <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+            </div>
+        </article>
+
+        <!-- MJ ZONE -->
+        <section class="section-header text-epic">
+            <div class="section-num">VOLONTÉ DU MJ</div>
+            <h2 class="section-title">Pouvoir de l'Anneau</h2>
+            <div class="section-subtitle">Bonus & Malus Arbitraires</div>
+            <div class="section-divider"></div>
+        </section>
+
+        <div class="quest-card legendary">
+            <p style="color: var(--gold-bright); font-size: 0.9rem; text-align: center; margin-bottom: 12px;">"Un Anneau
+                pour les gouverner tous..."</p>
+            <div class="mj-grid">
+                <button class="mj-btn plus-com" onclick="addBonus('A', 1)">
+                    <span>+1</span> <span>Com</span>
+                </button>
+                <button class="mj-btn plus-mor" onclick="addBonus('B', 1)">
+                    <span>+1</span> <span>Mordor</span>
+                </button>
+                <button class="mj-btn" onclick="addBonus('A', -1)">
+                    <span>−1</span> <span>Pénalité</span>
+                </button>
+                <button class="mj-btn" onclick="addBonus('B', -1)">
+                    <span>−1</span> <span>Pénalité</span>
+                </button>
+            </div>
+        </div>
+
+        <div class="footer">
+            <button class="reset-trigger" onclick="openModal()">💀 Réinitialiser</button>
+        </div>
+
+    </main>
+
+    <!-- CONFIRM MODAL -->
+    <div class="modal-mask" id="resetModal">
+        <div class="modal-box">
+            <h3 class="modal-title">Apocalypse ?</h3>
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">Tout effacer et recommencer l'histoire ?</p>
+            <div class="modal-actions">
+                <button class="modal-btn btn-cancel" onclick="closeModal()">Annuler</button>
+                <button class="modal-btn btn-danger" onclick="confirmReset()">OUI</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIC -->
+    <script>
+        // --- SPOTICLASH INJECTION ---
+        const spotContainer = document.getElementById('spoticlash_container');
+        for (let i = 1; i <= 10; i++) {
+            spotContainer.innerHTML += `
+            <article class="quest-card" data-points="1">
+                <div class="card-header">
+                    <div class="card-meta">
+                        <h3 class="card-title">🎵 Manche ${i}</h3>
+                        <p class="card-desc">Qui a le plus de streams sur Spotify ?</p>
+                    </div>
+                    <div class="xp-badge">1 PT</div>
+                </div>
+                <div class="rune-actions">
+                    <button class="rune-btn com" onclick="toggleScore(event, this, 'A')">COMMUNAUTÉ</button>
+                    <button class="rune-btn mor" onclick="toggleScore(event, this, 'B')">MORDOR</button>
+                </div>
+            </article>`;
+        }
+
+        // --- STATE & AUDIO ---
+        let bonusA = 0;
+        let bonusB = 0;
+        const scoreElA = document.getElementById('scoreA');
+        const scoreElB = document.getElementById('scoreB');
+
+        const vibrate = (pattern) => {
+            if (navigator.vibrate) navigator.vibrate(pattern);
+        };
+
+        // --- CORE LOGIC ---
+        function toggleScore(evt, btn, team) {
+            // iOS Safari fix: prevent event bubbling
+            if (evt) {
+                evt.preventDefault();
+                evt.stopPropagation();
+            }
+
+            vibrate(10); // Light tap
+
+            // More defensive querySelector for iOS
+            const card = btn.closest('.quest-card');
+            if (!card) return; // Safety check
+
+            const allButtons = card.querySelectorAll('.rune-btn');
+            let btnA = null, btnB = null;
+
+            allButtons.forEach(b => {
+                if (b.classList.contains('com')) btnA = b;
+                if (b.classList.contains('mor')) btnB = b;
+            });
+
+            if (!btnA || !btnB) return; // Safety check
+
+            if (team === 'A') {
+                if (btnA.classList.contains('active')) {
+                    btnA.classList.remove('active');
+                } else {
+                    btnA.classList.add('active');
+                    btnB.classList.remove('active');
+                }
+            } else {
+                if (btnB.classList.contains('active')) {
+                    btnB.classList.remove('active');
+                } else {
+                    btnB.classList.add('active');
+                    btnA.classList.remove('active');
+                }
+            }
+
+            recalc();
+        }
+
+        function toggleSecret(btn) {
+            vibrate(5);
+            const box = btn.nextElementSibling;
+            box.classList.toggle('open');
+            btn.classList.toggle('open');
+        }
+
+        function addBonus(team, val) {
+            vibrate(20);
+            if (team === 'A') bonusA += val;
+            else bonusB += val;
+            recalc();
+        }
+
+        function recalc() {
+            let sA = 0, sB = 0;
+            document.querySelectorAll('.quest-card').forEach(c => {
+                // Skip MJ control card (has no data-points)
+                if (!c.hasAttribute('data-points')) return;
+
+                const pts = parseInt(c.getAttribute('data-points')) || 0;
+
+                // Use explicit loop instead of CSS selector (iOS Safari fix)
+                const buttons = c.querySelectorAll('.rune-btn');
+                buttons.forEach(btn => {
+                    if (btn.classList.contains('active')) {
+                        if (btn.classList.contains('com')) sA += pts;
+                        if (btn.classList.contains('mor')) sB += pts;
+                    }
+                });
+            });
+            updateDisplay(scoreElA, sA + bonusA);
+            updateDisplay(scoreElB, sB + bonusB);
+        }
+
+        function updateDisplay(el, val) {
+            if (parseInt(el.innerText) !== val) {
+                el.innerText = val;
+                el.classList.remove('bump');
+                void el.offsetWidth;
+                el.classList.add('bump');
+                setTimeout(() => el.classList.remove('bump'), 200);
+            }
+        }
+
+        // --- MODAL ---
+        const modal = document.getElementById('resetModal');
+        function openModal() { modal.classList.add('active'); }
+        function closeModal() { modal.classList.remove('active'); }
+
+        function confirmReset() {
+            vibrate([50, 50, 50]);
+            document.querySelectorAll('.rune-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.secret-box').forEach(b => b.classList.remove('open'));
+            document.querySelectorAll('.reveal-btn').forEach(b => b.classList.remove('open'));
+            bonusA = 0; bonusB = 0;
+            recalc();
+            closeModal();
+        }
+
+        // Close modal on click outside
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+    </script>
+</body>
+
+</html>
