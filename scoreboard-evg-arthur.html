@@ -242,49 +242,47 @@
         .delta {
             position: absolute;
             font-family: var(--font-tech);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 700;
             opacity: 0;
-            top: 65%;
-            /* Lower, overlaps score nicely */
-            left: 50%;
-            transform: translate(-50%, -50%);
+            bottom: -5px;
+            /* Anchored at bottom, fully visible */
             animation: deltaPopFade 1.5s forwards;
             pointer-events: none;
             white-space: nowrap;
             z-index: 2000;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
-            /* Better visibility */
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
         }
 
+        /* Random left/right positions */
         .delta.plus {
             color: var(--team-com-base);
-            /* Green */
+            right: 5px;
         }
 
         .delta.minus {
             color: var(--team-mor-base);
-            /* Red */
+            left: 5px;
         }
 
         @keyframes deltaPopFade {
             0% {
                 opacity: 0;
-                transform: translate(-50%, -50%) scale(0.5);
+                transform: scale(0.5);
             }
 
             15% {
                 opacity: 1;
-                transform: translate(-50%, -50%) scale(1.3);
+                transform: scale(1.2);
             }
 
             30% {
-                transform: translate(-50%, -50%) scale(1);
+                transform: scale(1);
             }
 
             100% {
                 opacity: 0;
-                transform: translate(-50%, -80%) scale(0.8);
+                transform: translateY(-15px) scale(0.9);
             }
         }
 
