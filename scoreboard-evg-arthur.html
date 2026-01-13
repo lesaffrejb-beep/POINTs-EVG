@@ -1675,8 +1675,9 @@
         }
 
         // =====================================================================
-        // SWIPE GESTURES
+        // SWIPE GESTURES (DISABLED - interferes with scrolling)
         // =====================================================================
+        /*
         let touchStartX = 0;
         document.addEventListener('touchstart', e => {
             touchStartX = e.changedTouches[0].screenX;
@@ -1695,6 +1696,7 @@
             if (diff > 0 && btnA) toggleScore(null, btnA, 'A'); // Swipe right = Communauté
             else if (diff < 0 && btnB) toggleScore(null, btnB, 'B'); // Swipe left = Mordor
         }, { passive: true });
+        */
 
         // =====================================================================
         // FULLSCREEN
