@@ -168,10 +168,10 @@
             flex-direction: column;
             align-items: center;
             width: 110px;
-            /* Increased to fit name */
             min-width: 110px;
             position: relative;
-            /* overflow: visible; */
+            overflow: visible;
+            /* CRITICAL: Allow deltas to flow outside */
         }
 
         .team-name {
@@ -242,30 +242,22 @@
             font-weight: 700;
             opacity: 0;
             top: 50%;
-            /* Centered with score */
             transform: translateY(-50%);
             animation: deltaSideFade 1.2s forwards;
             pointer-events: none;
             white-space: nowrap;
-        }
-
-        .t-com .delta {
-            right: -8px;
-            /* Slightly closer */
-        }
-
-        .t-mor .delta {
-            left: -8px;
-            /* Slightly closer */
+            z-index: 2000;
         }
 
         .delta.plus {
-            color: var(--team-com-base);
+            right: -20px;
         }
 
         .delta.minus {
-            color: var(--team-mor-base);
+            left: -20px;
         }
+
+        /* .delta.plus and .delta.minus colors defined above */
 
         @keyframes deltaSideFade {
             0% {
