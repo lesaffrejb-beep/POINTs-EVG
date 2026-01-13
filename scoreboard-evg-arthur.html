@@ -176,13 +176,17 @@
 
         .team-name {
             font-family: var(--font-epic);
-            font-size: 0.65rem;
-            color: var(--text-secondary);
-            margin-bottom: 0px;
+            font-size: 0.75rem;
+            /* Increased for readability */
+            color: var(--text-primary);
+            /* Brighter color */
+            margin-bottom: 2px;
             font-weight: 700;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
             text-align: center;
             white-space: nowrap;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            /* Better contrast */
         }
 
         .score-val {
@@ -238,26 +242,51 @@
         .delta {
             position: absolute;
             font-family: var(--font-tech);
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: 700;
             opacity: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            animation: deltaSideFade 1.2s forwards;
+            top: 65%;
+            /* Lower, overlaps score nicely */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: deltaPopFade 1.5s forwards;
             pointer-events: none;
             white-space: nowrap;
             z-index: 2000;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+            /* Better visibility */
         }
 
         .delta.plus {
-            right: -20px;
+            color: var(--team-com-base);
+            /* Green */
         }
 
         .delta.minus {
-            left: -20px;
+            color: var(--team-mor-base);
+            /* Red */
         }
 
-        /* .delta.plus and .delta.minus colors defined above */
+        @keyframes deltaPopFade {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.5);
+            }
+
+            15% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1.3);
+            }
+
+            30% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -80%) scale(0.8);
+            }
+        }
 
         @keyframes deltaSideFade {
             0% {
