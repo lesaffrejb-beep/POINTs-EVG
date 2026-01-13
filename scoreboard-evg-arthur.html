@@ -178,7 +178,8 @@
 
         .score-val {
             font-family: var(--font-tech);
-            font-size: 2.5rem;
+            font-size: 4rem;
+            /* Large Score */
             font-weight: 700;
             line-height: 1;
             transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -931,8 +932,15 @@
             <div class="card-header">
                 <div class="card-meta">
                     <h3 class="card-title">Q5 : Le TOC</h3>
-                    <p class="card-desc">Arthur a un toc. C'est quoi ?<br><small>1) Inbox 0 • 2) Vaisselle avant manger
-                            • 3) Catégoriser virements • 4) Compter caisses</small></p>
+                    <div class="card-desc">
+                        Arthur a un toc. C'est quoi ?
+                        <ul style="list-style: none; margin-top: 12px; padding: 0; color: var(--text-secondary);">
+                            <li style="margin-bottom: 6px;">1) Inbox 0</li>
+                            <li style="margin-bottom: 6px;">2) Vaisselle avant manger</li>
+                            <li style="margin-bottom: 6px;">3) Catégoriser virements</li>
+                            <li>4) Compter caisses supermarché</li>
+                        </ul>
+                    </div>
                     <button class="reveal-btn" onclick="toggleSecret(this)">
                         <span>Révélations</span>
                         <span class="reveal-icon">▼</span>
