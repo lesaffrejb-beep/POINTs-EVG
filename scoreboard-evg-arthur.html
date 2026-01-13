@@ -778,18 +778,9 @@
            ENHANCEMENT: PLAYED STATE
            ======================================================================== */
         .quest-card.played {
-            opacity: 0.75;
-            border-color: var(--border-gold-subtle);
-        }
-
-        .quest-card.played::after {
-            content: '✓';
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            font-size: 0.8rem;
-            color: var(--gold-base);
-            opacity: 0.7;
+            opacity: 0.5;
+            filter: grayscale(0.4);
+            transition: all 0.5s ease;
         }
 
         /* ========================================================================
