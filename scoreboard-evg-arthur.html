@@ -166,27 +166,32 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 80px;
-            min-width: 80px;
-            overflow: hidden;
-            /* Prevent overflow on mobile */
+            width: 110px;
+            /* Increased to fit name */
+            min-width: 110px;
+            position: relative;
+            /* overflow: visible; */
         }
 
         .team-name {
-            font-size: 0.7rem;
+            font-family: var(--font-epic);
+            font-size: 0.65rem;
             color: var(--text-secondary);
-            margin-bottom: -2px;
-            font-weight: 600;
+            margin-bottom: 0px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-align: center;
+            white-space: nowrap;
         }
 
         .score-val {
             font-family: var(--font-tech);
             font-size: 3.5rem;
-            /* Reduced from 4rem for mobile */
             font-weight: 700;
-            line-height: 1;
+            line-height: 1.2;
+            /* Fix bottom cut-off */
             transition: none;
-            /* Smoother animation via keyframe */
+            padding-bottom: 4px;
         }
 
         /* Team Colors */
@@ -223,6 +228,55 @@
 
             100% {
                 transform: scale(1);
+            }
+        }
+
+        /* ========================================================================
+           ENHANCEMENT: DELTA SCORE
+           ======================================================================== */
+        .delta {
+            position: absolute;
+            font-family: var(--font-tech);
+            font-size: 1.4rem;
+            font-weight: 700;
+            opacity: 0;
+            top: 55%;
+            transform: translateY(-50%);
+            animation: deltaSideFade 1.2s forwards;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+
+        .t-com .delta {
+            right: -5px;
+        }
+
+        .t-mor .delta {
+            left: -5px;
+        }
+
+        .delta.plus {
+            color: var(--team-com-base);
+        }
+
+        .delta.minus {
+            color: var(--team-mor-base);
+        }
+
+        @keyframes deltaSideFade {
+            0% {
+                opacity: 0;
+                transform: translateY(-50%) scale(0.5);
+            }
+
+            20% {
+                opacity: 1;
+                transform: translateY(-50%) scale(1.2);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-80%) scale(1);
             }
         }
 
@@ -788,37 +842,7 @@
             }
         }
 
-        /* ========================================================================
-           ENHANCEMENT: DELTA SCORE
-           ======================================================================== */
-        .delta {
-            position: absolute;
-            font-family: var(--font-tech);
-            font-size: 1.2rem;
-            font-weight: 700;
-            opacity: 0;
-            animation: deltaFade 1.5s forwards;
-        }
-
-        .delta.plus {
-            color: var(--team-com-base);
-        }
-
-        .delta.minus {
-            color: var(--team-mor-base);
-        }
-
-        @keyframes deltaFade {
-            0% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-
-            100% {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-        }
+        /* Delta Score CSS moved to header section */
 
         /* ========================================================================
            ENHANCEMENT: PLAYED STATE
