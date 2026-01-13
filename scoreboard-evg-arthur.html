@@ -706,6 +706,8 @@
            ENHANCEMENT: TOAST NOTIFICATIONS
            ======================================================================== */
         .toast-container {
+            display: none;
+            /* User requested removal */
             position: fixed;
             bottom: 100px;
             left: 50%;
@@ -1587,7 +1589,7 @@
                     btnA.classList.add('active');
                     btnB.classList.remove('active');
                     card.classList.add('played');
-                    showToast('⚔️ Point pour la Communauté !');
+                    // showToast('⚔️ Point pour la Communauté !');
                 }
             } else {
                 if (btnB.classList.contains('active')) {
@@ -1597,7 +1599,7 @@
                     btnB.classList.add('active');
                     btnA.classList.remove('active');
                     card.classList.add('played');
-                    showToast('🔥 Le Mordor marque !');
+                    // showToast('🔥 Le Mordor marque !');
                 }
             }
             recalc();
@@ -1614,7 +1616,7 @@
             vibrate(20);
             if (team === 'A') bonusA += val;
             else bonusB += val;
-            showToast(val > 0 ? '💍 Bonus accordé !' : '⚡ Pénalité infligée !');
+            // showToast(val > 0 ? '💍 Bonus accordé !' : '⚡ Pénalité infligée !');
             recalc();
         }
 
@@ -1724,7 +1726,7 @@
             localStorage.removeItem('evg-scoreboard');
             recalc(true);
             closeModal();
-            showToast('🔥 L\'Anneau a été détruit !');
+            // showToast('🔥 L\'Anneau a été détruit !');
         }
 
         modal.addEventListener('click', (e) => {
