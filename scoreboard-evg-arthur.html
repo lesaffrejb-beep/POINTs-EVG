@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&family=Inter:wght@300;400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap"
         rel="stylesheet">
 
     <style>
@@ -35,12 +35,12 @@
             --gold-gradient: linear-gradient(135deg, var(--gold-base) 0%, var(--gold-dim) 100%);
 
             /* === TEAMS === */
-            --team-com-dim: #154c25;
-            --team-com-base: #4ade80;
-            --team-com-glow: #22c55e;
+            --team-com-dim: #064e3b;
+            --team-com-base: #059669;
+            --team-com-glow: #10b981;
 
-            --team-mor-dim: #5c1414;
-            --team-mor-base: #ef4444;
+            --team-mor-dim: #7f1d1d;
+            --team-mor-base: #b91c1c;
             --team-mor-glow: #dc2626;
 
             /* === BORDERS & SEPARATORS === */
@@ -74,8 +74,8 @@
             /* === FONTS === */
             --font-epic: 'Cinzel', serif;
             /* Titles */
-            --font-tech: 'Rajdhani', sans-serif;
-            /* HUD / Numbers */
+            --font-tech: 'Cormorant Garamond', serif;
+            /* HUD / Numbers - Medieval style */
             --font-body: 'Inter', sans-serif;
             /* Reading text */
         }
@@ -664,10 +664,325 @@
             color: #000;
             box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
         }
+
+        /* ========================================================================
+           ENHANCEMENT: TEXTURE OVERLAY
+           ======================================================================== */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.015'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.4;
+        }
+
+        /* ========================================================================
+           ENHANCEMENT: RIPPLE EFFECT
+           ======================================================================== */
+        .rune-btn {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .rune-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, currentColor 10%, transparent 10.01%);
+            transform: scale(10);
+            opacity: 0;
+            transition: transform 0.4s, opacity 0.6s;
+        }
+
+        .rune-btn:active::after {
+            transform: scale(0);
+            opacity: 0.2;
+            transition: 0s;
+        }
+
+        /* ========================================================================
+           ENHANCEMENT: TOAST NOTIFICATIONS
+           ======================================================================== */
+        .toast-container {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3000;
+            pointer-events: none;
+        }
+
+        .toast {
+            background: var(--bg-glass-heavy);
+            border: 1px solid var(--border-gold-subtle);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: var(--font-tech);
+            font-size: 1rem;
+            color: var(--gold-bright);
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: toastIn 0.3s forwards, toastOut 0.3s 1.5s forwards;
+        }
+
+        @keyframes toastIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes toastOut {
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+
+        /* ========================================================================
+           ENHANCEMENT: DELTA SCORE
+           ======================================================================== */
+        .delta {
+            position: absolute;
+            font-family: var(--font-tech);
+            font-size: 1.2rem;
+            font-weight: 700;
+            opacity: 0;
+            animation: deltaFade 1.5s forwards;
+        }
+
+        .delta.plus {
+            color: var(--team-com-base);
+        }
+
+        .delta.minus {
+            color: var(--team-mor-base);
+        }
+
+        @keyframes deltaFade {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+
+        /* ========================================================================
+           ENHANCEMENT: PLAYED STATE
+           ======================================================================== */
+        .quest-card.played {
+            opacity: 0.75;
+            border-color: var(--border-gold-subtle);
+        }
+
+        .quest-card.played::after {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            font-size: 0.8rem;
+            color: var(--gold-base);
+            opacity: 0.7;
+        }
+
+        /* ========================================================================
+           ENHANCEMENT: TIMER
+           ======================================================================== */
+        .timer-widget {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-tech);
+            font-size: 1rem;
+            color: var(--text-secondary);
+        }
+
+        .timer-display {
+            min-width: 60px;
+            text-align: center;
+            color: var(--gold-base);
+        }
+
+        .timer-btn {
+            background: none;
+            border: 1px solid var(--border-glass);
+            color: var(--text-tertiary);
+            padding: 4px 8px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .timer-btn:hover {
+            color: var(--gold-base);
+            border-color: var(--border-gold-subtle);
+        }
+
+        /* ========================================================================
+           ENHANCEMENT: EMBER PARTICLES
+           ======================================================================== */
+        .ember-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .ember {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: var(--gold-base);
+            border-radius: 50%;
+            opacity: 0;
+            animation: emberFloat 8s infinite ease-in-out;
+        }
+
+        @keyframes emberFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) scale(0.5);
+            }
+
+            10% {
+                opacity: 0.6;
+            }
+
+            90% {
+                opacity: 0.3;
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-10vh) scale(0);
+            }
+        }
+
+        /* ========================================================================
+           ENHANCEMENT: ACHIEVEMENTS
+           ======================================================================== */
+        .achievement-popup {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.8);
+            background: linear-gradient(135deg, var(--gold-dim) 0%, var(--gold-base) 100%);
+            color: #000;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-family: var(--font-epic);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            z-index: 4000;
+            opacity: 0;
+            pointer-events: none;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.5);
+        }
+
+        .achievement-popup.show {
+            animation: achievementIn 0.5s forwards, achievementOut 0.5s 2.5s forwards;
+        }
+
+        @keyframes achievementIn {
+            to {
+                opacity: 1;
+                transform: translateX(-50%) scale(1);
+            }
+        }
+
+        @keyframes achievementOut {
+            to {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+        }
+
+        /* ========================================================================
+           ENHANCEMENT: CARD CORNER ORNAMENTS
+           ======================================================================== */
+        .quest-card::before,
+        .quest-card::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border: 1px solid var(--border-gold-subtle);
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+
+        .quest-card::before {
+            top: -1px;
+            left: -1px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .quest-card::after {
+            bottom: -1px;
+            right: -1px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .quest-card:hover::before,
+        .quest-card:hover::after {
+            width: 20px;
+            height: 20px;
+            border-color: var(--gold-base);
+            opacity: 1;
+        }
+
+        /* ========================================================================
+           ENHANCEMENT: FULLSCREEN BUTTON
+           ======================================================================== */
+        .fullscreen-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--bg-glass);
+            border: 1px solid var(--border-glass);
+            color: var(--text-tertiary);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s;
+        }
+
+        .fullscreen-btn:hover {
+            color: var(--gold-base);
+            border-color: var(--border-gold-subtle);
+        }
     </style>
 </head>
 
 <body>
+
+    <!-- EMBER PARTICLES -->
+    <div class="ember-container" id="emberContainer"></div>
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ACHIEVEMENT POPUP -->
+    <div class="achievement-popup" id="achievementPopup"></div>
+
+    <!-- FULLSCREEN BUTTON -->
+    <button class="fullscreen-btn" id="fullscreenBtn" title="Plein écran">⛶</button>
 
     <!-- HUD -->
     <header class="hud-header">
@@ -689,10 +1004,10 @@
 
     <main class="container">
 
-        <!-- CHAPITRE 1 -->
+        <!-- LIVRE 1 -->
         <section class="section-header text-epic">
-            <div class="section-num">CHAPITRE I</div>
-            <h2 class="section-title">Le Duathlon</h2>
+            <div class="section-num">LIVRE I</div>
+            <h2 class="section-title">L'Épreuve des Deux Royaumes</h2>
             <div class="section-subtitle">L'Auberge du Poney Fringant</div>
             <div class="section-divider"></div>
         </section>
@@ -783,10 +1098,10 @@
             </div>
         </article>
 
-        <!-- CHAPITRE 2 -->
+        <!-- LIVRE 2 -->
         <section class="section-header text-epic">
-            <div class="section-num">CHAPITRE II</div>
-            <h2 class="section-title">Beer Pong</h2>
+            <div class="section-num">LIVRE II</div>
+            <h2 class="section-title">Le Siège du Gouffre</h2>
             <div class="section-subtitle">La Bataille du Gouffre de Helm</div>
             <div class="section-divider"></div>
         </section>
@@ -808,10 +1123,10 @@
             </div>
         </article>
 
-        <!-- CHAPITRE 3 -->
+        <!-- LIVRE 3 -->
         <section class="section-header text-epic">
-            <div class="section-num">CHAPITRE III</div>
-            <h2 class="section-title">Spoticlash</h2>
+            <div class="section-num">LIVRE III</div>
+            <h2 class="section-title">Duel de Ménestrels</h2>
             <div class="section-subtitle">Le Chant des Ainur</div>
             <div class="section-divider"></div>
         </section>
@@ -820,11 +1135,11 @@
             <!-- JS Will Inject Here -->
         </div>
 
-        <!-- CHAPITRE 4 -->
+        <!-- LIVRE 4 -->
         <section class="section-header text-epic">
-            <div class="section-num">CHAPITRE IV</div>
-            <h2 class="section-title">Le Grand Quiz</h2>
-            <div class="section-subtitle">Les Énigmes de Gollum</div>
+            <div class="section-num">LIVRE IV</div>
+            <h2 class="section-title">Les Énigmes de l'Oracle</h2>
+            <div class="section-subtitle">La Sagesse de Gollum</div>
             <div class="section-divider"></div>
         </section>
 
@@ -836,7 +1151,7 @@
                     <p class="card-desc">Arthur s'est déjà pété sérieusement quelque chose. Je veux la partie du corps
                         et comment c'est arrivé.</p>
                     <button class="reveal-btn" onclick="toggleSecret(this)">
-                        <span>Révélations</span>
+                        <span>Voir la Réponse</span>
                         <span class="reveal-icon">▼</span>
                     </button>
                     <div class="secret-box">
@@ -861,7 +1176,7 @@
                     <p class="card-desc">Liste exhaustive des exs ET amoureuses d'Arthur. Point bonus si vous dites s'il
                         a conclu.</p>
                     <button class="reveal-btn" onclick="toggleSecret(this)">
-                        <span>Révélations</span>
+                        <span>Voir la Réponse</span>
                         <span class="reveal-icon">▼</span>
                     </button>
                     <div class="secret-box">
@@ -886,7 +1201,7 @@
                     <p class="card-desc">Dans quel département français précis se trouve le "Paintball 79" où nous
                         étions cet aprem ?</p>
                     <button class="reveal-btn" onclick="toggleSecret(this)">
-                        <span>Révélations</span>
+                        <span>Voir la Réponse</span>
                         <span class="reveal-icon">▼</span>
                     </button>
                     <div class="secret-box">
@@ -910,7 +1225,7 @@
                     <h3 class="card-title">Q4 : Le Berger</h3>
                     <p class="card-desc">Je veux le prénom du berger pour qui travaillait Arthur à Moulinet.</p>
                     <button class="reveal-btn" onclick="toggleSecret(this)">
-                        <span>Révélations</span>
+                        <span>Voir la Réponse</span>
                         <span class="reveal-icon">▼</span>
                     </button>
                     <div class="secret-box">
@@ -942,7 +1257,7 @@
                         </ul>
                     </div>
                     <button class="reveal-btn" onclick="toggleSecret(this)">
-                        <span>Révélations</span>
+                        <span>Voir la Réponse</span>
                         <span class="reveal-icon">▼</span>
                     </button>
                     <div class="secret-box">
@@ -966,7 +1281,7 @@
                     <h3 class="card-title">Q6 : La Rencontre</h3>
                     <p class="card-desc">Où Arthur et Anaé se sont-ils vus pour la première fois ?</p>
                     <button class="reveal-btn" onclick="toggleSecret(this)">
-                        <span>Révélations</span>
+                        <span>Voir la Réponse</span>
                         <span class="reveal-icon">▼</span>
                     </button>
                     <div class="secret-box">
@@ -991,7 +1306,7 @@
                     <p class="card-desc">Combien a pu boire Arthur de litres à Tonton Foch pendant sa période rue Hoche
                         ? (En moins de 2h)</p>
                     <button class="reveal-btn" onclick="toggleSecret(this)">
-                        <span>Révélations</span>
+                        <span>Voir la Réponse</span>
                         <span class="reveal-icon">▼</span>
                     </button>
                     <div class="secret-box">
@@ -1016,7 +1331,7 @@
                     <p class="card-desc">Un mot qu'Arthur écrit H24 par message mais ne dit jamais dans la vraie vie.
                     </p>
                     <button class="reveal-btn" onclick="toggleSecret(this)">
-                        <span>Révélations</span>
+                        <span>Voir la Réponse</span>
                         <span class="reveal-icon">▼</span>
                     </button>
                     <div class="secret-box">
@@ -1041,7 +1356,7 @@
                     <p class="card-desc">Combien de photos exactement contient le dossier Drive "Souvenirs Arthur" ? (Au
                         plus proche)</p>
                     <button class="reveal-btn" onclick="toggleSecret(this)">
-                        <span>Révélations</span>
+                        <span>Voir la Réponse</span>
                         <span class="reveal-icon">▼</span>
                     </button>
                     <div class="secret-box">
@@ -1066,7 +1381,7 @@
                     <p class="card-desc">Quel est le seul club français à avoir gagné la Ligue des Champions ? (Année
                         bonus)</p>
                     <button class="reveal-btn" onclick="toggleSecret(this)">
-                        <span>Révélations</span>
+                        <span>Voir la Réponse</span>
                         <span class="reveal-icon">▼</span>
                     </button>
                     <div class="secret-box">
@@ -1085,8 +1400,8 @@
 
         <!-- MJ ZONE -->
         <section class="section-header text-epic">
-            <div class="section-num">VOLONTÉ DU MJ</div>
-            <h2 class="section-title">Pouvoir de l'Anneau</h2>
+            <div class="section-num">VOLONTÉ DE L'UNIQUE</div>
+            <h2 class="section-title">Le Pouvoir de l'Anneau</h2>
             <div class="section-subtitle">Bonus & Malus Arbitraires</div>
             <div class="section-divider"></div>
         </section>
@@ -1111,7 +1426,7 @@
         </div>
 
         <div class="footer">
-            <button class="reset-trigger" onclick="openModal()">💀 Réinitialiser</button>
+            <button class="reset-trigger" onclick="openModal()">🔥 Briser l'Anneau</button>
         </div>
 
     </main>
@@ -1130,14 +1445,16 @@
 
     <!-- LOGIC -->
     <script>
-        // --- SPOTICLASH INJECTION ---
+        // =====================================================================
+        // SPOTICLASH INJECTION (with numbering)
+        // =====================================================================
         const spotContainer = document.getElementById('spoticlash_container');
         for (let i = 1; i <= 10; i++) {
             spotContainer.innerHTML += `
-            <article class="quest-card" data-points="1">
+            <article class="quest-card" data-points="1" data-card-id="spoti-${i}">
                 <div class="card-header">
                     <div class="card-meta">
-                        <h3 class="card-title">🎵 Manche ${i}</h3>
+                        <h3 class="card-title">🎵 Manche ${i}/10</h3>
                         <p class="card-desc">Qui a le plus de streams sur Spotify ?</p>
                     </div>
                     <div class="xp-badge">1 PT</div>
@@ -1149,56 +1466,149 @@
             </article>`;
         }
 
-        // --- STATE & AUDIO ---
+        // =====================================================================
+        // STATE
+        // =====================================================================
         let bonusA = 0;
         let bonusB = 0;
+        let lastScoreA = 0;
+        let lastScoreB = 0;
+        let achievements = { firstBlood: false, domination: false, photoFinish: false };
         const scoreElA = document.getElementById('scoreA');
         const scoreElB = document.getElementById('scoreB');
+        const toastContainer = document.getElementById('toastContainer');
+        const achievementPopup = document.getElementById('achievementPopup');
 
         const vibrate = (pattern) => {
             if (navigator.vibrate) navigator.vibrate(pattern);
         };
 
-        // --- CORE LOGIC ---
+        // =====================================================================
+        // LOCALSTORAGE PERSISTENCE
+        // =====================================================================
+        function saveState() {
+            const state = {
+                bonusA, bonusB, achievements,
+                buttons: []
+            };
+            document.querySelectorAll('.quest-card[data-points]').forEach((c, i) => {
+                const active = c.querySelector('.rune-btn.active');
+                state.buttons.push(active ? (active.classList.contains('com') ? 'A' : 'B') : null);
+            });
+            localStorage.setItem('evg-scoreboard', JSON.stringify(state));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('evg-scoreboard');
+            if (!saved) return;
+            try {
+                const state = JSON.parse(saved);
+                bonusA = state.bonusA || 0;
+                bonusB = state.bonusB || 0;
+                achievements = state.achievements || { firstBlood: false, domination: false, photoFinish: false };
+                const cards = document.querySelectorAll('.quest-card[data-points]');
+                state.buttons.forEach((val, i) => {
+                    if (val && cards[i]) {
+                        const btn = cards[i].querySelector(val === 'A' ? '.com' : '.mor');
+                        if (btn) btn.classList.add('active');
+                        cards[i].classList.add('played');
+                    }
+                });
+                recalc(true); // silent
+            } catch (e) { console.warn('Failed to load state', e); }
+        }
+
+        // =====================================================================
+        // EMBER PARTICLES
+        // =====================================================================
+        function createEmbers() {
+            const container = document.getElementById('emberContainer');
+            for (let i = 0; i < 25; i++) {
+                const ember = document.createElement('div');
+                ember.className = 'ember';
+                ember.style.left = Math.random() * 100 + '%';
+                ember.style.animationDelay = Math.random() * 8 + 's';
+                ember.style.animationDuration = (6 + Math.random() * 4) + 's';
+                container.appendChild(ember);
+            }
+        }
+
+        // =====================================================================
+        // TOAST NOTIFICATIONS
+        // =====================================================================
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            toastContainer.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        }
+
+        // =====================================================================
+        // ACHIEVEMENTS
+        // =====================================================================
+        function showAchievement(title) {
+            achievementPopup.textContent = '🏆 ' + title;
+            achievementPopup.classList.add('show');
+            vibrate([100, 50, 100]);
+            setTimeout(() => achievementPopup.classList.remove('show'), 3000);
+        }
+
+        function checkAchievements(sA, sB) {
+            // First Blood
+            if (!achievements.firstBlood && (sA > 0 || sB > 0)) {
+                achievements.firstBlood = true;
+                showAchievement('Premier Sang !');
+            }
+            // Domination (5+ lead)
+            if (!achievements.domination && Math.abs(sA - sB) >= 5) {
+                achievements.domination = true;
+                showAchievement('Domination !');
+            }
+        }
+
+        // =====================================================================
+        // CORE LOGIC
+        // =====================================================================
         function toggleScore(evt, btn, team) {
-            // iOS Safari fix: prevent event bubbling
             if (evt) {
                 evt.preventDefault();
                 evt.stopPropagation();
             }
+            vibrate(10);
 
-            vibrate(10); // Light tap
-
-            // More defensive querySelector for iOS
             const card = btn.closest('.quest-card');
-            if (!card) return; // Safety check
+            if (!card) return;
 
             const allButtons = card.querySelectorAll('.rune-btn');
             let btnA = null, btnB = null;
-
             allButtons.forEach(b => {
                 if (b.classList.contains('com')) btnA = b;
                 if (b.classList.contains('mor')) btnB = b;
             });
-
-            if (!btnA || !btnB) return; // Safety check
+            if (!btnA || !btnB) return;
 
             if (team === 'A') {
                 if (btnA.classList.contains('active')) {
                     btnA.classList.remove('active');
+                    card.classList.remove('played');
                 } else {
                     btnA.classList.add('active');
                     btnB.classList.remove('active');
+                    card.classList.add('played');
+                    showToast('⚔️ Point pour la Communauté !');
                 }
             } else {
                 if (btnB.classList.contains('active')) {
                     btnB.classList.remove('active');
+                    card.classList.remove('played');
                 } else {
                     btnB.classList.add('active');
                     btnA.classList.remove('active');
+                    card.classList.add('played');
+                    showToast('🔥 Le Mordor marque !');
                 }
             }
-
             recalc();
         }
 
@@ -1213,18 +1623,15 @@
             vibrate(20);
             if (team === 'A') bonusA += val;
             else bonusB += val;
+            showToast(val > 0 ? '💍 Bonus accordé !' : '⚡ Pénalité infligée !');
             recalc();
         }
 
-        function recalc() {
+        function recalc(silent = false) {
             let sA = 0, sB = 0;
             document.querySelectorAll('.quest-card').forEach(c => {
-                // Skip MJ control card (has no data-points)
                 if (!c.hasAttribute('data-points')) return;
-
                 const pts = parseInt(c.getAttribute('data-points')) || 0;
-
-                // Use explicit loop instead of CSS selector (iOS Safari fix)
                 const buttons = c.querySelectorAll('.rune-btn');
                 buttons.forEach(btn => {
                     if (btn.classList.contains('active')) {
@@ -1233,8 +1640,35 @@
                     }
                 });
             });
-            updateDisplay(scoreElA, sA + bonusA);
-            updateDisplay(scoreElB, sB + bonusB);
+
+            const totalA = sA + bonusA;
+            const totalB = sB + bonusB;
+
+            if (!silent) {
+                // Delta display
+                if (totalA !== lastScoreA) showDelta(scoreElA, totalA - lastScoreA);
+                if (totalB !== lastScoreB) showDelta(scoreElB, totalB - lastScoreB);
+                checkAchievements(totalA, totalB);
+            }
+
+            lastScoreA = totalA;
+            lastScoreB = totalB;
+
+            updateDisplay(scoreElA, totalA);
+            updateDisplay(scoreElB, totalB);
+            saveState();
+        }
+
+        function showDelta(el, diff) {
+            if (diff === 0) return;
+            const delta = document.createElement('span');
+            delta.className = 'delta ' + (diff > 0 ? 'plus' : 'minus');
+            delta.textContent = (diff > 0 ? '+' : '') + diff;
+            delta.style.left = '50%';
+            delta.style.top = '-10px';
+            el.parentElement.style.position = 'relative';
+            el.parentElement.appendChild(delta);
+            setTimeout(() => delta.remove(), 1500);
         }
 
         function updateDisplay(el, val) {
@@ -1247,7 +1681,42 @@
             }
         }
 
-        // --- MODAL ---
+        // =====================================================================
+        // SWIPE GESTURES
+        // =====================================================================
+        let touchStartX = 0;
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        }, { passive: true });
+
+        document.addEventListener('touchend', e => {
+            const touchEndX = e.changedTouches[0].screenX;
+            const diff = touchEndX - touchStartX;
+            if (Math.abs(diff) < 80) return; // Min swipe distance
+
+            const card = e.target.closest('.quest-card');
+            if (!card || !card.hasAttribute('data-points')) return;
+
+            const btnA = card.querySelector('.com');
+            const btnB = card.querySelector('.mor');
+            if (diff > 0 && btnA) toggleScore(null, btnA, 'A'); // Swipe right = Communauté
+            else if (diff < 0 && btnB) toggleScore(null, btnB, 'B'); // Swipe left = Mordor
+        }, { passive: true });
+
+        // =====================================================================
+        // FULLSCREEN
+        // =====================================================================
+        document.getElementById('fullscreenBtn').addEventListener('click', () => {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(e => { });
+            } else {
+                document.exitFullscreen();
+            }
+        });
+
+        // =====================================================================
+        // MODAL
+        // =====================================================================
         const modal = document.getElementById('resetModal');
         function openModal() { modal.classList.add('active'); }
         function closeModal() { modal.classList.remove('active'); }
@@ -1255,17 +1724,27 @@
         function confirmReset() {
             vibrate([50, 50, 50]);
             document.querySelectorAll('.rune-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.quest-card').forEach(c => c.classList.remove('played'));
             document.querySelectorAll('.secret-box').forEach(b => b.classList.remove('open'));
             document.querySelectorAll('.reveal-btn').forEach(b => b.classList.remove('open'));
             bonusA = 0; bonusB = 0;
-            recalc();
+            lastScoreA = 0; lastScoreB = 0;
+            achievements = { firstBlood: false, domination: false, photoFinish: false };
+            localStorage.removeItem('evg-scoreboard');
+            recalc(true);
             closeModal();
+            showToast('🔥 L\'Anneau a été détruit !');
         }
 
-        // Close modal on click outside
         modal.addEventListener('click', (e) => {
             if (e.target === modal) closeModal();
         });
+
+        // =====================================================================
+        // INIT
+        // =====================================================================
+        createEmbers();
+        loadState();
     </script>
 </body>
 
