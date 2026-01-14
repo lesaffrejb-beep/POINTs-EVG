@@ -149,6 +149,8 @@
             justify-content: space-between;
             align-items: center;
             padding: var(--s-sm) var(--s-md);
+            padding-top: calc(var(--s-sm) + env(safe-area-inset-top));
+            /* Safe area for notch */
             background: var(--bg-glass);
             backdrop-filter: var(--blur-glass);
             -webkit-backdrop-filter: var(--blur-glass);
@@ -359,7 +361,8 @@
             max-width: 650px;
             margin: 0 auto;
             padding: 0 var(--s-md);
-            padding-top: 80px;
+            padding-top: calc(100px + env(safe-area-inset-top));
+            /* Increased offset for larger fixed header */
             /* Offset for fixed header */
         }
 

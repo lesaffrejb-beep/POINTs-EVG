@@ -10,7 +10,7 @@ Une interface d'arbitrage (HUD) inspirée des jeux AAA (*Elden Ring*, *Diablo*),
 ### ✨ Features Clés
 
 *   **⚡ Live Score & Deltas** : Animation dynamique des points (+1/-1) style RPG.
-*   **📱 Mobile-First** : Expérience fluide type "app native" sur iOS/Android.
+*   **📱 Mobile-First & Immersif** : Mode plein écran natif (cache la barre d'adresse) avec gestion du notch (safe-area).
 *   **🧙‍♂️ Mode MJ** : Interface de contrôle pour distribuer bonus/malus.
 *   **💾 Auto-Save** : Persistance des scores (LocalStorage) en cas de refresh.
 *   **🎨 Direction Artistique** :
