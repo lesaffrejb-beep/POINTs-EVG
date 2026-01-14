@@ -140,8 +140,10 @@
            COMPONENT: HUD HEADER (Sticky)
            ======================================================================== */
         .hud-header {
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
+            right: 0;
             z-index: 1000;
             display: flex;
             justify-content: space-between;
@@ -357,6 +359,8 @@
             max-width: 650px;
             margin: 0 auto;
             padding: 0 var(--s-md);
+            padding-top: 80px;
+            /* Offset for fixed header */
         }
 
         /* SECTIONS */
